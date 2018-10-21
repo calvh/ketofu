@@ -1,17 +1,42 @@
 require("dotenv").config();
-var express = require("express");
-var exphbs = require("express-handlebars");
 
-var db = require("./models");
+// -------------------------------  EXPRESS  ------------------------------
+const PORT = process.env.PORT || 3000;
+const express = require("express");
+const app = express();
 
-var app = express();
-var PORT = process.env.PORT || 3000;
+// ------------------------------  DATABASE  ------------------------------
+const db = require("./models");
 
-// Middleware
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
-app.use(express.static("public"));
+// -----------------------------  MIDDLEWARE  -----------------------------
 
+// ---------- bodyparser ----------
+const bodyParser = require("body-parser");
+app.use(bodyParser.urlencoded({ extended: "true" }));
+app.use(bodyParser.json());
+
+// --------- cookie parser --------
+app.use(require("cookie-parser")());
+
+// ------------ helmet ------------
+// * helmet sets security headers
+app.use(require("helmet")());
+
+// ------------- cors -------------
+// * allow app to access HTTP resources on another domain other than origin
+app.use(require("cors")());
+
+// ---------- compression ---------
+// * compression increases performance
+app.use(require("compression")());
+
+
+// ------------ morgan ------------
+// * http logging
+// app.use(require("morgan")("combined"));
+
+// -----------------------------  HANDLEBARS  -----------------------------
+const exphbs = require("express-handlebars");
 // Handlebars
 app.engine(
   "handlebars",
@@ -21,11 +46,33 @@ app.engine(
 );
 app.set("view engine", "handlebars");
 
-// Routes
-require("./routes/apiRoutes")(app);
-require("./routes/htmlRoutes")(app);
+// -------------------------------  PUBLIC  -------------------------------
+app.use(express.static("public"));
 
-var syncOptions = { force: false };
+// ------------------------------  PASSPORT  ------------------------------
+const passport = require("./auth/passport");
+app.use(
+  require("express-session")({
+    secret: "25EC9F66F434192D22D482A413F4B",
+    resave: false,
+    saveUninitialized: false
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
+
+// -------------------------------  ROUTES  -------------------------------
+
+const router = express.Router();
+require("./routes/authRoutes")(router, passport);
+require("./routes/apiRoutes")(router);
+require("./routes/htmlRoutes")(router);
+
+app.use("/", router);
+
+// -------------------------------  STARTUP  ------------------------------
+
+let syncOptions = { force: false };
 
 // If running a test, set syncOptions.force to true
 // clearing the `testdb`
@@ -34,8 +81,8 @@ if (process.env.NODE_ENV === "test") {
 }
 
 // Starting the server, syncing our models ------------------------------------/
-db.sequelize.sync({force: true}).then(function() {
-  app.listen(PORT, function() {
+db.sequelize.sync(syncOptions).then(() => {
+  app.listen(PORT, () => {
     console.log(
       "==> 🌎  Listening on port %s. Visit http://localhost:%s/ in your browser.",
       PORT,
