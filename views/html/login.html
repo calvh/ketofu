@@ -18,7 +18,29 @@
 </head>
 
 <body>
-    {{{body}}}
+    <div>
+        <div class="container">
+            <div class="jumbotron">
+                <h2>Login to KetoFu</h2>
+                <br>
+                <form id="login">
+                    <div class="form-group">
+                        <label for="email-input">Email</label>
+                        <input type="email" class="form-control" name="" id="email-input" aria-describedby="emailHelpId"
+                            placeholder="Enter email">
+                    </div>
+                    <div class="form-group">
+                        <label for="password-input">Password</label>
+                        <input type="password" class="form-control" name="" id="password-input" placeholder="Password">
+                    </div>
+                    <a href="/register" class="float-left alert-link">Register for a new account</a>
+                    <button type="submit" class="btn btn-primary float-right">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/js/login.js"></script>
 </body>
 
 </html>
