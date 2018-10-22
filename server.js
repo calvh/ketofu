@@ -27,7 +27,6 @@ app.use(require("cors")());
 // * compression increases performance
 app.use(require("compression")());
 
-
 // ------------ morgan ------------
 // * http logging
 // app.use(require("morgan")("combined"));
@@ -61,8 +60,8 @@ app.use(passport.session());
 // -------------------------------  ROUTES  -------------------------------
 
 const router = express.Router();
-require("./routes/authRoutes")(router, passport);
-require("./routes/apiRoutes")(router, db);
+require("./routes/authRoutes")(router, passport, require("./utils/validate"));
+require("./routes/apiRoutes")(router, db, require("./utils/calculateMacros"));
 require("./routes/htmlRoutes")(router);
 
 app.use("/", router);

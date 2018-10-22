@@ -1,6 +1,5 @@
 $(function() {
-  $(".weight-unit:contains('lbs')").toggleClass("active focus");
-  $(".height-unit:contains('in')").toggleClass("active focus");
+  document.getElementById("input-date").valueAsDate = new Date();
 
   $(document).on("click", ".weight-unit", function(e) {
     e.preventDefault();
@@ -27,21 +26,17 @@ $(function() {
   $(document).on("submit", "#form-add-entry", function(e) {
     e.preventDefault();
 
-    const gender = $("input[name=radio-gender]:checked").val();
-    const age = $("#input-age").val();
+    const entry_date = $("#input-date").val();
     const weight_lb = $("#input-weight").val();
-    const height_in = $("#input-height").val();
     const act_lvl = $("#input-activity").val();
-    const fat_pct = $("#input-fat").val();
+    const fat_pct = $("#input-fat").val() / 100;
     const cal_deficit = $("#input-caloric-def").val() / 100;
     const net_carbs = $("#input-net-carbs").val();
 
     // * only send data if non-empty value
     const data = {
-      ...(gender && { gender }),
-      ...(age && { age }),
+      ...(entry_date && { entry_date }),
       ...(weight_lb && { weight_lb }),
-      ...(height_in && { height_in }),
       ...(act_lvl && { act_lvl }),
       ...(fat_pct && { fat_pct }),
       ...(cal_deficit && { cal_deficit }),
@@ -50,8 +45,8 @@ $(function() {
 
     $.post("/profile", data)
       .done(function(data, status, jqXHR) {
-        // TODO maybe update page here?
-        window.location = "/profile";
+        // TODO maybe update page here instead of refreshing?
+        location.reload();
       })
       .fail(function(jqXHR, status, error) {
         console.log(jqXHR);

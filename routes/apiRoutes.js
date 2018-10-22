@@ -1,4 +1,4 @@
-module.exports = (router, db) => {
+module.exports = (router, db, calculateMacros) => {
   const sequelize = db.sequelize;
   const User = db.User;
   const Log = db.Log;
@@ -9,25 +9,27 @@ module.exports = (router, db) => {
     .get((req, res, next) => {
       // * find user and all associated log entries
       User.findById(req.user.id, {
-        include: {
-          model: Log,
-          attributes: {
-            include: [
-              // * convert created_at to date only
-              [
-                sequelize.fn(
-                  "date_format",
-                  sequelize.col("Logs.created_at"),
-                  "%Y-%m-%d"
-                ),
-                "entry_date"
-              ]
-            ]
-          }
-        }
-      }).then(user => {
+        include: { model: Log }
+      }).then(dbUser => {
         // * use toJSON() to convert to raw format while preserving logs
-        res.render("profile", { user: user.toJSON() });
+        const user = dbUser.toJSON();
+        user.age = new Date().getFullYear() - new Date(user.dob).getFullYear();
+        user.Logs.forEach(log => {
+          const macros = calculateMacros(
+            user.age,
+            user.gender,
+            user.height_in,
+            log.weight_lb,
+            log.act_lvl,
+            log.fat_pct,
+            log.cal_deficit,
+            log.net_carbs
+          );
+          log.net_protein = macros.protein;
+          log.net_fat = macros.fat;
+        });
+
+        res.render("profile", { user: dbUser.toJSON() });
       });
     })
     .post((req, res, next) => {
