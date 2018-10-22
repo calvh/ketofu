@@ -7,15 +7,30 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true
       },
-      entry_date: DataTypes.DATEONLY,
-      age: DataTypes.INTEGER,
-      gender: DataTypes.STRING,
-      weight_lb: DataTypes.DOUBLE,
-      height_in: DataTypes.DOUBLE,
-      act_lvl: DataTypes.DOUBLE,
-      fat_pct: DataTypes.DOUBLE,
-      cal_deficit: DataTypes.DOUBLE,
-      net_carbs: DataTypes.DOUBLE
+      age: {
+        type: DataTypes.INTEGER
+      },
+      gender: {
+        type: DataTypes.STRING
+      },
+      weight_lb: {
+        type: DataTypes.DOUBLE
+      },
+      height_in: {
+        type: DataTypes.DOUBLE
+      },
+      act_lvl: {
+        type: DataTypes.DOUBLE
+      },
+      fat_pct: {
+        type: DataTypes.DOUBLE
+      },
+      cal_deficit: {
+        type: DataTypes.DOUBLE
+      },
+      net_carbs: {
+        type: DataTypes.DOUBLE
+      }
     },
     { underscored: true }
   );

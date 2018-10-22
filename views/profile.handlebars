@@ -12,7 +12,7 @@
     <table class="table table-striped table-sm">
         <thead>
             <tr>
-                <th>entry_date</th>
+                <th>date</th>
                 <th>gender</th>
                 <th>age</th>
                 <th>weight_lb</th>
@@ -25,17 +25,17 @@
             </tr>
         </thead>
         <tbody>
-            {{#each logs}}
+            {{#each user.Logs}}
                 <tr>
-                    <td>{{{this.entry_date}}}</td>
-                    <td>{{{this.gender}}}</td>
-                    <td>{{{this.age}}}</td>
-                    <td>{{{this.weight_lb}}}</td>
-                    <td>{{{this.height_in}}}</td>
-                    <td>{{{this.act_lvl}}}</td>
-                    <td>{{{this.fat_pct}}}</td>
-                    <td>{{{this.cal_deficit}}}</td>
-                    <td>{{{this.net_carbs}}}</td>
+                    <td>{{{entry_date}}}</td>
+                    <td>{{{gender}}}</td>
+                    <td>{{{age}}}</td>
+                    <td>{{{weight_lb}}}</td>
+                    <td>{{{height_in}}}</td>
+                    <td>{{{act_lvl}}}</td>
+                    <td>{{{fat_pct}}}</td>
+                    <td>{{{cal_deficit}}}</td>
+                    <td>{{{net_carbs}}}</td>
                 </tr>
             {{/each}}
 

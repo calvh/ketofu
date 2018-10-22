@@ -15,9 +15,6 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: "true" }));
 app.use(bodyParser.json());
 
-// --------- cookie parser --------
-app.use(require("cookie-parser")());
-
 // ------------ helmet ------------
 // * helmet sets security headers
 app.use(require("helmet")());
@@ -65,7 +62,7 @@ app.use(passport.session());
 
 const router = express.Router();
 require("./routes/authRoutes")(router, passport);
-require("./routes/apiRoutes")(router);
+require("./routes/apiRoutes")(router, db);
 require("./routes/htmlRoutes")(router);
 
 app.use("/", router);
