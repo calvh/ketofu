@@ -1,8 +1,7 @@
 $(function() {
-  $(".weight-unit:contains('lbs')").toggleClass("active focus");
-  $(".height-unit:contains('in')").toggleClass("active focus");
+  document.getElementById("input-date").valueAsDate = new Date();
 
-  $(document).on("click", ".weight-unit",function(e) {
+  $(document).on("click", ".weight-unit", function(e) {
     e.preventDefault();
     $(".weight-unit")
       .not(this)
@@ -10,7 +9,7 @@ $(function() {
     $(this).toggleClass("active focus");
   });
 
-  $(document).on("click", ".height-unit",function(e) {
+  $(document).on("click", ".height-unit", function(e) {
     e.preventDefault();
     $(".height-unit")
       .not(this)
@@ -26,22 +25,28 @@ $(function() {
 
   $(document).on("submit", "#form-add-entry", function(e) {
     e.preventDefault();
+
+    const entry_date = $("#input-date").val();
+    const weight_lb = $("#input-weight").val();
+    const act_lvl = $("#input-activity").val();
+    const fat_pct = $("#input-fat").val() / 100;
+    const cal_deficit = $("#input-caloric-def").val() / 100;
+    const net_carbs = $("#input-net-carbs").val();
+
+    // * only send data if non-empty value
     const data = {
-      entry_date: new Date(),
-      gender: $("input[name=radio-gender]:checked").val(),
-      age: $("#input-age").val(),
-      weight_lb: $("#input-weight").val(),
-      height_in: $("#input-height").val(),
-      act_lvl: $("#input-activity").val(),
-      fat_pct: $("#input-fat").val(),
-      cal_deficit: $("#input-caloric-def").val() / 100,
-      net_carbs: $("#input-net-carbs").val()
+      ...(entry_date && { entry_date }),
+      ...(weight_lb && { weight_lb }),
+      ...(act_lvl && { act_lvl }),
+      ...(fat_pct && { fat_pct }),
+      ...(cal_deficit && { cal_deficit }),
+      ...(net_carbs && { net_carbs })
     };
 
     $.post("/profile", data)
       .done(function(data, status, jqXHR) {
-        // TODO maybe update page here?
-        window.location = "/profile";
+        // TODO maybe update page here instead of refreshing?
+        location.reload();
       })
       .fail(function(jqXHR, status, error) {
         console.log(jqXHR);

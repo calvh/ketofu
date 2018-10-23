@@ -7,15 +7,33 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true
       },
-      entry_date: DataTypes.DATEONLY,
-      age: DataTypes.INTEGER,
-      gender: DataTypes.STRING,
-      weight_lb: DataTypes.DOUBLE,
-      height_in: DataTypes.DOUBLE,
-      act_lvl: DataTypes.DOUBLE,
-      fat_pct: DataTypes.DOUBLE,
-      cal_deficit: DataTypes.DOUBLE,
-      net_carbs: DataTypes.DOUBLE
+
+      entry_date: {
+        type: DataTypes.DATEONLY,
+        validate: {
+          isDate: { msg: "Invalid date." }
+        }
+      },
+
+      weight_lb: {
+        type: DataTypes.DOUBLE
+      },
+
+      act_lvl: {
+        type: DataTypes.DOUBLE
+      },
+
+      fat_pct: {
+        type: DataTypes.DOUBLE
+      },
+
+      cal_deficit: {
+        type: DataTypes.DOUBLE
+      },
+
+      net_carbs: {
+        type: DataTypes.DOUBLE
+      }
     },
     { underscored: true }
   );

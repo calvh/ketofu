@@ -1,4 +1,4 @@
-module.exports = (router, passport) => {
+module.exports = (router, passport, validate) => {
   router.route("/login").post((req, res, next) => {
     passport.authenticate("local-login", function(err, user, info) {
       if (err) {
@@ -22,35 +22,58 @@ module.exports = (router, passport) => {
   });
 
   router.route("/register").post((req, res, next) => {
+    const first_name = req.body.first_name ? req.body.first_name.trim() : "";
+    const last_name = req.body.last_name ? req.body.last_name.trim() : "";
     const email = req.body.email ? req.body.email.trim() : "";
     const password = req.body.password ? req.body.password.trim() : "";
+    const gender = req.body.gender ? req.body.gender : "";
+    const dob = req.body.dob ? req.body.dob : "";
+    const height_in = req.body.height_in ? req.body.height_in: "";
 
-    if (!email || !password) {
-      return res
-        .status(422)
-        .send({ error: "Email and password are required." });
+    if (!email || !password || !first_name || !last_name || !gender || !dob) {
+      return res.status(422).send({ error: "All fields are required." });
     }
 
-    function validateEmail(email) {
-      const regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return regex.test(email);
+    if (!validate.name(first_name)) {
+      return res.status(422).send({
+        error: "Invalid first name."
+      });
     }
 
-    function validatePassword(password) {
-      const regex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
-      return regex.test(password);
+    if (!validate.name(last_name)) {
+      return res.status(422).send({
+        error: "Invalid last name."
+      });
     }
 
-    if (!validateEmail(email)) {
+    if (!validate.email(email)) {
       return res.status(422).send({
         error: "Invalid email format."
       });
     }
 
-    if (!validatePassword(password)) {
+    if (!validate.password(password)) {
       return res.status(422).send({
         error:
           "Password must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters."
+      });
+    }
+
+    if (gender !== "M" && gender !== "F") {
+      return res.status(422).send({
+        error: "Invalid gender value."
+      });
+    }
+
+    if (!validate.dob(dob)) {
+      return res.status(422).send({
+        error: "Date of birth must be in the past."
+      });
+    }
+
+    if (!(height_in>0)) {
+      return res.status(422).send({
+        error: "Height must be a positive number."
       });
     }
 

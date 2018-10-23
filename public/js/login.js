@@ -1,5 +1,5 @@
 $(function() {
-  $("#btn-login").on("click", function(e) {
+  $("#form-login").on("submit", function(e) {
     e.preventDefault();
 
     const email = $("#input-email")
@@ -10,14 +10,14 @@ $(function() {
       .trim();
 
     if (!email || !password) {
-      console.log("Please fill in email and password.");
+      console.log("Please fill in email and password."); // TODO: replace with onscreen error
     } else {
       $.post("/login", { email, password })
         .done(function(data, status, jqXHR) {
           window.location = "/profile";
         })
         .fail(function(jqXHR, status, error) {
-          console.log(JSON.parse(jqXHR.responseText).error);
+          console.log(JSON.parse(jqXHR.responseText).error); // TODO: replace with onscreen error
         });
     }
   });

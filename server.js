@@ -15,9 +15,6 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: "true" }));
 app.use(bodyParser.json());
 
-// --------- cookie parser --------
-app.use(require("cookie-parser")());
-
 // ------------ helmet ------------
 // * helmet sets security headers
 app.use(require("helmet")());
@@ -29,7 +26,6 @@ app.use(require("cors")());
 // ---------- compression ---------
 // * compression increases performance
 app.use(require("compression")());
-
 
 // ------------ morgan ------------
 // * http logging
@@ -64,8 +60,8 @@ app.use(passport.session());
 // -------------------------------  ROUTES  -------------------------------
 
 const router = express.Router();
-require("./routes/authRoutes")(router, passport);
-require("./routes/apiRoutes")(router);
+require("./routes/authRoutes")(router, passport, require("./utils/validate"));
+require("./routes/apiRoutes")(router, db, require("./utils/calculateMacros"));
 require("./routes/htmlRoutes")(router);
 
 app.use("/", router);

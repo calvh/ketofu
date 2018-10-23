@@ -11,9 +11,10 @@ passport.use(
   new LocalStrategy(
     {
       usernameField: "email",
-      passwordField: "password"
+      passwordField: "password",
+      passReqToCallback: true
     },
-    (email, password, done) => {
+    (req, email, password, done) => {
       User.findOne({ where: { email }, raw: true })
         .then(user => {
           if (user) {
@@ -27,6 +28,11 @@ passport.use(
           const hash = bcrypt.hashSync(password, salt);
 
           const userObj = {
+            first_name: req.body.first_name,
+            last_name: req.body.last_name,
+            gender: req.body.gender,
+            dob: req.body.dob,
+            height_in: req.body.height_in,
             email,
             password: hash
           };
