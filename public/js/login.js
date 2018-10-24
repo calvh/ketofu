@@ -14,7 +14,7 @@ $(function() {
     } else {
       $.post("/login", { email, password })
         .done(function(data, status, jqXHR) {
-          window.location = "/profile";
+          window.location = "/dashboard";
         })
         .fail(function(jqXHR, status, error) {
           console.log(JSON.parse(jqXHR.responseText).error); // TODO: replace with onscreen error

@@ -11,7 +11,7 @@ module.exports = (router, passport, validate) => {
         if (err) {
           return res.status(400).send({ error: err });
         }
-        return res.redirect("/profile");
+        return res.redirect("/dashboard");
       });
     })(req, res, next);
   });
@@ -88,7 +88,7 @@ module.exports = (router, passport, validate) => {
         if (err) {
           return res.status(400).send({ error: err });
         }
-        return res.redirect("/profile");
+        return res.redirect("/dashboard");
       });
     })(req, res, next);
   });
