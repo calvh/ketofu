@@ -1,10 +1,10 @@
-module.exports = (router, db, calculateMacros) => {
+module.exports = (router, db, ensureLoggedIn, calculateMacros) => {
   const sequelize = db.sequelize;
   const User = db.User;
   const Log = db.Log;
 
   router
-    .route("/profile")
+    .route("/api/users")
     .all(require("connect-ensure-login").ensureLoggedIn("/login"))
     .get((req, res, next) => {
       // * find user and all associated log entries
@@ -25,12 +25,27 @@ module.exports = (router, db, calculateMacros) => {
             log.cal_deficit,
             log.net_carbs
           );
-          log.net_protein = macros.protein;
-          log.net_fat = macros.fat;
+          log.net_protein = macros.protein.toFixed(1);
+          log.net_fat = macros.fat.toFixed(1);
         });
-
-        res.render("profile", { user: dbUser.toJSON() });
+        res.json(user);
       });
+    })
+    .post((req, res, next) => {
+      next();
+    })
+    .put((req, res, next) => {
+      next();
+    })
+    .delete((req, res, next) => {
+      next();
+    });
+
+  router
+    .route("/api/logs")
+    .all(require("connect-ensure-login").ensureLoggedIn("/login"))
+    .get((req, res, next) => {
+      next();
     })
     .post((req, res, next) => {
       // * add user_id to the data object to be submitted
@@ -47,8 +62,6 @@ module.exports = (router, db, calculateMacros) => {
       next();
     })
     .delete((req, res, next) => {
-      Log.destroy({ where: { id: req.params.id } }).then(function(dbExample) {
-        res.json(dbExample);
-      });
+      next();
     });
 };

@@ -56,13 +56,14 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+const ensureLoggedIn = require("connect-ensure-login").ensureLoggedIn;
 
 // -------------------------------  ROUTES  -------------------------------
 
 const router = express.Router();
 require("./routes/authRoutes")(router, passport, require("./utils/validate"));
-require("./routes/apiRoutes")(router, db, require("./utils/calculateMacros"));
-require("./routes/htmlRoutes")(router);
+require("./routes/apiRoutes")(router, db, ensureLoggedIn, require("./utils/calculateMacros"));
+require("./routes/renderRoutes")(router, db, ensureLoggedIn, require("./utils/calculateMacros"));
 
 app.use("/", router);
 
