@@ -1,7 +1,10 @@
 {
-  "name": "node-handlebars-boilerplate",
+  "name": "ketofu",
   "version": "1.0.0",
-  "description": "Project 2 Starter",
+  "engines": {
+    "node": "10.11.0"
+  },
+  "description": "KetoFu",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
