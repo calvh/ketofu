@@ -17,7 +17,7 @@ module.exports = (router, db, ensureLoggedIn, calculateMacros) => {
 
   router.get("/dashboard", ensureLoggedIn("/login"), (req, res) => {
     // * find user and all associated log entries
-    User.findById(req.user.id, {
+    User.findByPk(req.user.id, {
       include: { model: Log }
     }).then(dbUser => {
       // * use toJSON() to convert to raw format while preserving logs
